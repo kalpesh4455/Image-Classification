@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build Status](https://github.com/jacobgil/pytorch-grad-cam/workflows/Tests/badge.svg)
 [![Downloads](https://static.pepy.tech/personalized-badge/grad-cam?period=month&units=international_system&left_color=black&right_color=brightgreen&left_text=Monthly%20Downloads)](https://pepy.tech/project/grad-cam)
@@ -15,6 +16,14 @@ This can be used for diagnosing model predictions, either in production or while
 developing models.
 The aim is also to serve as a benchmark of algorithms and metrics for research of new explainability methods.
 
+
+pip install grad-cam
+
+Documentation with advanced tutorials: https://jacobgil.github.io/pytorch-gradcam-book
+
+This is a package with state of the art methods for Explainable AI for computer vision. This can be used for diagnosing model predictions, either in production or while developing models. The aim is also to serve as a benchmark of algorithms and metrics for research of new explainability methods.
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
+
 ⭐ Comprehensive collection of Pixel Attribution methods for Computer Vision.
 
 ⭐ Tested on many Common CNN Networks and Vision Transformers.
@@ -27,6 +36,7 @@ The aim is also to serve as a benchmark of algorithms and metrics for research o
 
 ⭐ Includes metrics for checking if you can trust the explanations, and tuning them for best performance.
 
+<<<<<<< HEAD
 
 ![visualization](https://github.com/jacobgil/jacobgil.github.io/blob/master/assets/cam_dog.gif?raw=true
 )
@@ -110,6 +120,68 @@ The aim is also to serve as a benchmark of algorithms and metrics for research o
 # Usage examples
 
 ```python
+=======
+visualization
+
+Method	What it does
+GradCAM	Weight the 2D activations by the average gradient
+HiResCAM	Like GradCAM but element-wise multiply the activations with the gradients; provably guaranteed faithfulness for certain models
+GradCAMElementWise	Like GradCAM but element-wise multiply the activations with the gradients then apply a ReLU operation before summing
+GradCAM++	Like GradCAM but uses second order gradients
+XGradCAM	Like GradCAM but scale the gradients by the normalized activations
+AblationCAM	Zero out activations and measure how the output drops (this repository includes a fast batched implementation)
+ScoreCAM	Perbutate the image by the scaled activations and measure how the output drops
+EigenCAM	Takes the first principle component of the 2D Activations (no class discrimination, but seems to give great results)
+EigenGradCAM	Like EigenCAM but with class discrimination: First principle component of Activations*Grad. Looks like GradCAM, but cleaner
+LayerCAM	Spatially weight the activations by positive gradients. Works better especially in lower layers
+FullGrad	Computes the gradients of the biases from all over the network, and then sums them
+Deep Feature Factorizations	Non Negative Matrix Factorization on the 2D activations
+KPCA-CAM	Like EigenCAM but with Kernel PCA instead of PCA
+FEM	A gradient free method that binarizes activations by an activation > mean + k * std rule.
+ShapleyCAM	Weight the activations using the gradient and Hessian-vector product.
+FinerCAM	Improves fine-grained classification by comparing similar classes, suppressing shared features and highlighting discriminative details.
+SegEigenCAM	Like EigenCAM but with gradient weighting (absolute gradients ⊙ activations) before SVD and sign correction to fix SVD sign ambiguity; designed for semantic segmentation
+RefineCAM	A meta-method that computes a CAM at multiple layers, and then it combines them to ubtain a higher resolution and better focused CAM. It can be used with any of the other CAM methods.
+SESS	A meta-method that computes CAMs for sliding window patches taken at multiple scales, and fuses them with score based channel weights and a spatial weighted average. Makes the CAM robust to scale variance, multiple occurrences of the object and distractors. It can be used with any of the other CAM methods.
+Visual Examples
+What makes the network think the image label is 'pug, pug-dog'	What makes the network think the image label is 'tabby, tabby cat'	Combining Grad-CAM with Guided Backpropagation for the 'pug, pug-dog' class
+		
+Object Detection and Semantic Segmentation
+Object Detection	Semantic Segmentation
+	
+3D Medical Semantic Segmentation
+
+Explaining similarity to other images / embeddings
+
+
+Deep Feature Factorization
+
+
+
+
+CLIP
+Explaining the text prompt "a dog"	Explaining the text prompt "a cat"
+	
+Classification
+Resnet50:
+Category	Image	GradCAM	AblationCAM	ScoreCAM
+Dog				
+Cat				
+Vision Transfomer (Deit Tiny):
+Category	Image	GradCAM	AblationCAM	ScoreCAM
+Dog				
+Cat				
+Swin Transfomer (Tiny window:7 patch:4 input-size:224):
+Category	Image	GradCAM	AblationCAM	ScoreCAM
+Dog				
+Cat				
+Metrics and Evaluation for XAI
+
+
+
+
+Usage examples
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 from pytorch_grad_cam import GradCAM, HiResCAM, ScoreCAM, GradCAMPlusPlus, AblationCAM, XGradCAM, EigenCAM, FullGrad
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from pytorch_grad_cam.utils.image import show_cam_on_image
@@ -132,6 +204,7 @@ with GradCAM(model=model, target_layers=target_layers) as cam:
   visualization = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
   # You can also get the model outputs without having to redo inference
   model_outputs = cam.outputs
+<<<<<<< HEAD
 ```
 
 [cam.py](https://github.com/jacobgil/pytorch-grad-cam/blob/master/cam.py) has a more detailed usage example.
@@ -213,6 +286,63 @@ The jupyter notebooks themselves can be found under the tutorials folder in the 
 # Guided backpropagation
 
 ```python
+=======
+cam.py has a more detailed usage example.
+
+Choosing the layer(s) to extract activations from
+You need to choose the target layer to compute the CAM for. Some common choices are:
+
+FasterRCNN: model.backbone
+Resnet18 and 50: model.layer4[-1]
+VGG, densenet161 and mobilenet: model.features[-1]
+mnasnet1_0: model.layers[-1]
+ViT: model.blocks[-1].norm1
+SwinT: model.layers[-1].blocks[-1].norm1
+If you pass a list with several layers, the CAM will be averaged accross them. This can be useful if you're not sure what layer will perform best.
+
+Adapting for new architectures and tasks
+Methods like GradCAM were designed for and were originally mostly applied on classification models, and specifically CNN classification models. However you can also use this package on new architectures like Vision Transformers, and on non classification tasks like Object Detection or Semantic Segmentation.
+
+The be able to adapt to non standard cases, we have two concepts.
+
+The reshape transform - how do we convert activations to represent spatial images ?
+The model targets - What exactly should the explainability method try to explain ?
+The reshape_transform argument
+In a CNN the intermediate activations in the model are a mult-channel image that have the dimensions channel x rows x cols, and the various explainabiltiy methods work with these to produce a new image.
+
+In case of another architecture, like the Vision Transformer, the shape might be different, like (rows x cols + 1) x channels, or something else. The reshape transform converts the activations back into a multi-channel image, for example by removing the class token in a vision transformer. For examples, check here
+
+The model_target argument
+The model target is just a callable that is able to get the model output, and filter it out for the specific scalar output we want to explain.
+
+For classification tasks, the model target will typically be the output from a specific category. The targets parameter passed to the CAM method can then use ClassifierOutputTarget:
+
+targets = [ClassifierOutputTarget(281)]
+However for more advanced cases, you might want a different behaviour. Check here for more examples.
+
+Tutorials
+Here you can find detailed examples of how to use this for various custom use cases like object detection:
+
+These point to the new documentation jupter-book for fast rendering. The jupyter notebooks themselves can be found under the tutorials folder in the git repository.
+
+Notebook tutorial: XAI Recipes for the HuggingFace 🤗 Image Classification Models
+
+Notebook tutorial: Deep Feature Factorizations for better model explainability
+
+Notebook tutorial: Class Activation Maps for Object Detection with Faster-RCNN
+
+Notebook tutorial: Class Activation Maps for YOLO5
+
+Notebook tutorial: Class Activation Maps for Semantic Segmentation
+
+Notebook tutorial: Adapting pixel attribution methods for embedding outputs from models
+
+Notebook tutorial: May the best explanation win. CAM Metrics and Tuning
+
+How it works with Vision/SwinT transformers
+
+Guided backpropagation
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 from pytorch_grad_cam import GuidedBackpropReLUModel
 from pytorch_grad_cam.utils.image import (
     show_cam_on_image, deprocess_image, preprocess_image
@@ -223,6 +353,7 @@ gb = gb_model(input_tensor, target_category=None)
 cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
 cam_gb = deprocess_image(cam_mask * gb)
 result = deprocess_image(gb)
+<<<<<<< HEAD
 ```
 
 ----------
@@ -230,6 +361,9 @@ result = deprocess_image(gb)
 # Metrics and evaluating the explanations
 
 ```python
+=======
+Metrics and evaluating the explanations
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputSoftmaxTarget
 from pytorch_grad_cam.metrics.cam_mult_image import CamMultImageConfidenceChange
 # Create the metric target, often the confidence drop in a score of some category
@@ -257,6 +391,7 @@ from pytorch_grad_cam.metrics.ARCC import ARCC
 
 cam_metric = ARCC(base_method=cam)
 arcc_score = cam_metric(input_tensor, grayscale_cams, targets, model)
+<<<<<<< HEAD
 ```
 
 
@@ -300,17 +435,48 @@ and to distractors, at the cost of running the base method once per patch.
 <img src="./examples/sess_comparison.png">
 
 ```python
+=======
+Smoothing to get nice looking CAMs
+To reduce noise in the CAMs, and make it fit better on the objects, two smoothing methods are supported:
+
+aug_smooth=True
+
+Test time augmentation: increases the run time by x6.
+
+Applies a combination of horizontal flips, and mutiplying the image by [1.0, 1.1, 0.9].
+
+This has the effect of better centering the CAM around the objects.
+
+eigen_smooth=True
+
+First principle component of activations*weights
+
+This has the effect of removing a lot of noise.
+
+AblationCAM	aug smooth	eigen smooth	aug+eigen smooth
+			
+Enhancing the CAM with scaling and sliding (SESS)
+SESS is a method agnostic wrapper around any of the other CAM methods. It resizes the image to several scales, slides a window over every scale, and fuses the CAM of every patch back into the original image coordinates, weighted by the score the model gives that patch. This makes the CAM robust to scale variance, to multiple occurrences of the object and to distractors, at the cost of running the base method once per patch.
+
+
+
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 from pytorch_grad_cam import SESS, GradCAM
 
 with SESS(model=model,
           target_layers=target_layers,
           base_method=GradCAM) as cam:
     grayscale_cam = cam(input_tensor=input_tensor, targets=targets)
+<<<<<<< HEAD
 ```
 
 The run time is controlled by the number of scales and by the sliding window stride:
 
 ```python
+=======
+The run time is controlled by the number of scales and by the sliding window stride:
+
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 cam = SESS(model=model,
            target_layers=target_layers,
            base_method=GradCAM,
@@ -318,6 +484,7 @@ cam = SESS(model=model,
            step_size=224,     # Non overlapping windows
            pre_filter_ratio=0.5,  # Skip the 50% lowest scoring patches
            batch_size=32)
+<<<<<<< HEAD
 ```
 
 ----------
@@ -348,6 +515,24 @@ You can control the batch size with
 If you use this for research, please cite. Here is an example BibTeX entry:
 
 ```
+=======
+Running the example script:
+Usage: python cam.py --image-path <path_to_image> --method <method> --output-dir <output_dir_path> 
+
+To use with a specific device, like cpu, cuda, cuda:0, mps or hpu: python cam.py --image-path <path_to_image> --device cuda  --output-dir <output_dir_path> 
+
+You can choose between:
+
+GradCAM , HiResCAM, ScoreCAM, GradCAMPlusPlus, AblationCAM, XGradCAM , LayerCAM, FullGrad, EigenCAM, ShapleyCAM, FinerCAM, SegEigenCAM and RefineCAM.
+
+Some methods like ScoreCAM and AblationCAM require a large number of forward passes, and have a batched implementation.
+
+You can control the batch size with cam.batch_size = 
+
+Citation
+If you use this for research, please cite. Here is an example BibTeX entry:
+
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509
 @misc{jacobgilpytorchcam,
   title={PyTorch library for CAM methods},
   author={Jacob Gildenblat and contributors},
@@ -355,6 +540,7 @@ If you use this for research, please cite. Here is an example BibTeX entry:
   publisher={GitHub},
   howpublished={\url{https://github.com/jacobgil/pytorch-grad-cam}},
 }
+<<<<<<< HEAD
 ```
 
 ----------
@@ -432,3 +618,57 @@ https://arxiv.org/abs/2605.14641 <br>
 https://arxiv.org/abs/2207.01769 <br>
 `SESS: Saliency Enhancing with Scaling and Sliding
 Osman Tursun, Simon Denman, Sridha Sridharan, Clinton Fookes`
+=======
+References
+https://arxiv.org/abs/1610.02391
+Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization Ramprasaath R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam, Devi Parikh, Dhruv Batra
+
+https://arxiv.org/abs/2011.08891
+Use HiResCAM instead of Grad-CAM for faithful explanations of convolutional neural networks Rachel L. Draelos, Lawrence Carin
+
+https://arxiv.org/abs/1710.11063
+Grad-CAM++: Improved Visual Explanations for Deep Convolutional Networks Aditya Chattopadhyay, Anirban Sarkar, Prantik Howlader, Vineeth N Balasubramanian
+
+https://arxiv.org/abs/1910.01279
+Score-CAM: Score-Weighted Visual Explanations for Convolutional Neural Networks Haofan Wang, Zifan Wang, Mengnan Du, Fan Yang, Zijian Zhang, Sirui Ding, Piotr Mardziel, Xia Hu
+
+https://ieeexplore.ieee.org/abstract/document/9093360/
+Ablation-cam: Visual explanations for deep convolutional network via gradient-free localization. Saurabh Desai and Harish G Ramaswamy. In WACV, pages 972–980, 2020
+
+https://arxiv.org/abs/2008.02312
+Axiom-based Grad-CAM: Towards Accurate Visualization and Explanation of CNNs Ruigang Fu, Qingyong Hu, Xiaohu Dong, Yulan Guo, Yinghui Gao, Biao Li
+
+https://arxiv.org/abs/2008.00299
+Eigen-CAM: Class Activation Map using Principal Components Mohammed Bany Muhammad, Mohammed Yeasin
+
+http://mftp.mmcheng.net/Papers/21TIP_LayerCAM.pdf
+LayerCAM: Exploring Hierarchical Class Activation Maps for Localization Peng-Tao Jiang; Chang-Bin Zhang; Qibin Hou; Ming-Ming Cheng; Yunchao Wei
+
+https://arxiv.org/abs/1905.00780
+Full-Gradient Representation for Neural Network Visualization Suraj Srinivas, Francois Fleuret
+
+https://arxiv.org/abs/1806.10206
+Deep Feature Factorization For Concept Discovery Edo Collins, Radhakrishna Achanta, Sabine Süsstrunk
+
+https://arxiv.org/abs/2410.00267
+KPCA-CAM: Visual Explainability of Deep Computer Vision Models using Kernel PCA Sachin Karmani, Thanushon Sivakaran, Gaurav Prasad, Mehmet Ali, Wenbo Yang, Sheyang Tang
+
+https://hal.science/hal-02963298/document
+Features Understanding in 3D CNNs for Actions Recognition in Video Kazi Ahmed Asif Fuad, Pierre-Etienne Martin, Romain Giot, Romain Bourqui, Jenny Benois-Pineau, Akka Zemmar
+
+https://arxiv.org/abs/2501.06261
+CAMs as Shapley Value-based Explainers Huaiguang Cai
+
+https://arxiv.org/pdf/2501.11309
+Finer-CAM : Spotting the Difference Reveals Finer Details for Visual Explanation
+Ziheng Zhang*, Jianyang Gu*, Arpita Chowdhury, Zheda Mai, David Carlyn,Tanya Berger-Wolf, Yu Su, Wei-Lun Chao
+
+https://doi.org/10.3390/app15137562
+Seg-Eigen-CAM: Eigen-Value-Based Visual Explanations for Semantic Segmentation Models Ching-Ting Chung, Josh Jia-Ching Ying
+
+https://arxiv.org/abs/2605.14641
+How to Evaluate and Refine your CAM Luca Domeniconi, Alessandra Stramiglio, Michele Lombardi, Samuele Salti
+
+https://arxiv.org/abs/2207.01769
+SESS: Saliency Enhancing with Scaling and Sliding Osman Tursun, Simon Denman, Sridha Sridharan, Clinton Fookes
+>>>>>>> fc10e3df47ccb24c747216edcadbc1ba5449c509

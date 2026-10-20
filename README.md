@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build Status](https://github.com/jacobgil/pytorch-grad-cam/workflows/Tests/badge.svg)
-period=total&units=international_system&left_color=black&right_color=blue&left_text=Total%20Downloads)](https://pepy.tech/project/grad-cam)
+
 
 # Advanced AI explainability for PyTorch
 

@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ![Build Status](https://github.com/jacobgil/pytorch-grad-cam/workflows/Tests/badge.svg)
 
 
